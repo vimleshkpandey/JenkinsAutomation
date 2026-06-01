@@ -1,0 +1,614 @@
+/* ─────────────────────────────────────────────────────────
+   JENKINS PIPELINE DASHBOARD — style.css
+   Theme tokens → layout → components → animations
+   ───────────────────────────────────────────────────────── */
+
+/* ── 1. THEME TOKENS ──────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg-page:       #0d1117;
+  --bg-card:       #161b22;
+  --bg-card-hover: #1c2333;
+  --bg-header:     #161b22;
+  --bg-toolbar:    #0d1117;
+  --bg-input:      #21262d;
+  --border:        #30363d;
+  --border-hover:  #58a6ff;
+  --text-primary:  #e6edf3;
+  --text-secondary:#8b949e;
+  --text-muted:    #484f58;
+  --accent:        #58a6ff;
+  --shadow:        0 4px 24px rgba(0,0,0,.45);
+  --shadow-hover:  0 8px 32px rgba(0,0,0,.65);
+  --radius:        12px;
+  --radius-sm:     8px;
+
+  /* Status palette */
+  --success:  #3fb950;
+  --failed:   #f85149;
+  --running:  #388bfd;
+  --unstable: #d29922;
+
+  /* Status glow */
+  --glow-success:  0 0 12px rgba(63,185,80,.45);
+  --glow-failed:   0 0 12px rgba(248,81,73,.45);
+  --glow-running:  0 0 12px rgba(56,139,253,.45);
+  --glow-unstable: 0 0 12px rgba(210,153,34,.45);
+}
+
+[data-theme="light"] {
+  --bg-page:       #f0f2f5;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f6f8fa;
+  --bg-header:     #ffffff;
+  --bg-toolbar:    #f0f2f5;
+  --bg-input:      #ffffff;
+  --border:        #d0d7de;
+  --border-hover:  #0969da;
+  --text-primary:  #1f2328;
+  --text-secondary:#656d76;
+  --text-muted:    #b0bac4;
+  --accent:        #0969da;
+  --shadow:        0 2px 12px rgba(0,0,0,.10);
+  --shadow-hover:  0 6px 24px rgba(0,0,0,.18);
+}
+
+/* ── 2. RESET / BASE ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background .3s, color .3s;
+}
+
+/* ── 3. HEADER ────────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 28px;
+  height: 64px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -.5px;
+}
+.logo-highlight { color: var(--accent); }
+
+/* Stats row */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  font-size: .82rem;
+  transition: border-color .2s;
+}
+.stat-chip.running { border-color: var(--running); }
+.stat-chip.failed  { border-color: var(--failed); }
+.stat-chip.success { border-color: var(--success); }
+
+.stat-label { color: var(--text-secondary); font-size: .78rem; }
+.stat-value {
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text-primary);
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Header right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.live-clock {
+  font-size: .85rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.theme-toggle {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: border-color .2s, transform .2s;
+}
+.theme-toggle:hover { border-color: var(--accent); transform: rotate(20deg); }
+
+/* ── 4. TOOLBAR ───────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1 1 220px;
+  max-width: 380px;
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-input::placeholder { color: var(--text-muted); }
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(88,166,255,.15);
+}
+
+.status-filter {
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: .9rem;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color .2s;
+}
+.status-filter:focus { border-color: var(--accent); }
+
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+}
+.btn-refresh:hover { opacity: .88; transform: translateY(-1px); }
+.btn-refresh:active { transform: translateY(0); }
+.btn-refresh svg { transition: transform .5s; }
+.btn-refresh.spinning svg { animation: spin 1s linear infinite; }
+
+.last-updated {
+  font-size: .8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ── 5. MAIN / GRID ───────────────────────────────────── */
+.main {
+  position: relative;
+  padding: 28px;
+  min-height: calc(100vh - 130px);
+}
+
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* ── 6. PIPELINE TILE ─────────────────────────────────── */
+.tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background .25s, border-color .25s, box-shadow .25s, transform .2s;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  transition: background .3s;
+}
+.tile[data-status="success"]::before  { background: var(--success); }
+.tile[data-status="failed"]::before   { background: var(--failed); }
+.tile[data-status="running"]::before  { background: var(--running); }
+.tile[data-status="unstable"]::before { background: var(--unstable); }
+
+.tile:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+.tile:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
+
+/* ── Tile header ── */
+.tile-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tile-status-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: none;
+}
+.tile[data-status="success"]  .tile-status-dot { background: var(--success); box-shadow: var(--glow-success); }
+.tile[data-status="failed"]   .tile-status-dot { background: var(--failed);  box-shadow: var(--glow-failed); }
+.tile[data-status="running"]  .tile-status-dot { background: var(--running); box-shadow: var(--glow-running); animation: pulse 1.4s ease-in-out infinite; }
+.tile[data-status="unstable"] .tile-status-dot { background: var(--unstable); box-shadow: var(--glow-unstable); }
+
+.tile-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile-refresh-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  transition: border-color .2s, color .2s, transform .5s;
+  flex-shrink: 0;
+}
+.tile-refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tile-refresh-btn.spinning { animation: spin 1s linear infinite; }
+
+/* ── Tile meta ── */
+.tile-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tile-status-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.tile[data-status="success"]  .tile-status-badge { background: rgba(63,185,80,.15);  color: var(--success); }
+.tile[data-status="failed"]   .tile-status-badge { background: rgba(248,81,73,.15);  color: var(--failed); }
+.tile[data-status="running"]  .tile-status-badge { background: rgba(56,139,253,.15); color: var(--running); }
+.tile[data-status="unstable"] .tile-status-badge { background: rgba(210,153,34,.15); color: var(--unstable); }
+
+.tile-build-number {
+  font-size: .8rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Progress bar (running only) ── */
+.progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.progress-wrap.hidden { display: none; }
+
+.progress-bar {
+  background: var(--border);
+  border-radius: 4px;
+  height: 5px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--running), #79c0ff);
+  transition: width .4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -40%;
+  width: 40%;
+  height: 100%;
+  background: rgba(255,255,255,.25);
+  animation: shimmer 1.4s infinite;
+}
+.progress-label {
+  font-size: .72rem;
+  color: var(--text-secondary);
+  align-self: flex-end;
+}
+
+/* ── Tile stats row ── */
+.tile-stats {
+  display: flex;
+  gap: 16px;
+}
+.tile-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .8rem;
+  color: var(--text-secondary);
+}
+.tile-stat svg { flex-shrink: 0; opacity: .7; }
+
+/* ── Failure message ── */
+.tile-message {
+  font-size: .78rem;
+  color: var(--failed);
+  background: rgba(248,81,73,.08);
+  border-left: 3px solid var(--failed);
+  border-radius: 0 4px 4px 0;
+  padding: 6px 10px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+.tile-message.hidden { display: none; }
+
+/* ── Branch tag ── */
+.tile-branch {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: auto;
+}
+
+/* ── 7. LOADING OVERLAY ───────────────────────────────── */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg-page);
+  color: var(--text-secondary);
+  font-size: .95rem;
+  z-index: 10;
+  transition: opacity .3s;
+}
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+/* ── 8. EMPTY STATE ───────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 80px 0;
+  color: var(--text-muted);
+  font-size: .95rem;
+}
+.empty-state.hidden { display: none; }
+.empty-state svg { opacity: .4; }
+
+/* ── 9. TOAST NOTIFICATIONS ───────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 340px;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  font-size: .85rem;
+  color: var(--text-primary);
+  animation: slideIn .3s ease forwards;
+  position: relative;
+  overflow: hidden;
+}
+.toast::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.toast.error::before   { background: var(--failed); }
+.toast.warning::before { background: var(--unstable); }
+.toast.info::before    { background: var(--accent); }
+.toast.success::before { background: var(--success); }
+
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.toast-body { flex: 1; }
+.toast-title { font-weight: 600; margin-bottom: 2px; }
+.toast-msg   { color: var(--text-secondary); font-size: .8rem; }
+.toast-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  padding: 0;
+  line-height: 1;
+  transition: color .2s;
+}
+.toast-close:hover { color: var(--text-primary); }
+
+.toast.fade-out { animation: fadeOut .3s ease forwards; }
+
+/* ── 10. ANIMATED STATUS DOTS (header) ───────────────── */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.running-dot { background: var(--running); animation: pulse 1.4s ease-in-out infinite; }
+.failed-dot  { background: var(--failed); }
+.success-dot { background: var(--success); }
+
+/* ── 11. SKELETON TILES ───────────────────────────────── */
+.skeleton-tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--border) 25%, var(--bg-card-hover) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+.skeleton-line.short  { width: 55%; }
+.skeleton-line.medium { width: 75%; }
+.skeleton-line.long   { width: 90%; }
+.skeleton-line.thin   { height: 8px; width: 60%; }
+
+/* ── 12. KEYFRAMES ────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.35); opacity: .7; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(110%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { transform: translateX(110%); opacity: 0; }
+}
+
+/* ── 13. UTILITY ──────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── 14. RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .header { padding: 0 16px; height: auto; padding-top: 12px; padding-bottom: 12px; }
+  .header-center { order: 3; width: 100%; justify-content: flex-start; }
+  .toolbar { padding: 12px 16px; }
+  .main { padding: 16px; }
+  .pipeline-grid { grid-template-columns: 1fr; }
+  .last-updated { display: none; }
+  .live-clock { font-size: .78rem; }
+}
+
+@media (max-width: 480px) {
+  .stat-chip { padding: 4px 10px; font-size: .78rem; }
+}
+
+/* ── 15. SCROLLBAR STYLING ─────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-page); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
